@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExamHub — Admin</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0f0f0f;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #e8e8e8;
+  }
+  .card {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 14px;
+    padding: 48px 40px;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+  }
+  .logo {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .logo span {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    color: #fff;
+  }
+  .logo span em {
+    color: #6c63ff;
+    font-style: normal;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+    margin-top: 4px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .error-box {
+    background: #2d1a1a;
+    border: 1px solid #5c2020;
+    color: #ff6b6b;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    margin-bottom: 20px;
+  }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  input {
+    width: 100%;
+    padding: 11px 14px;
+    background: #111;
+    border: 1px solid #2e2e2e;
+    border-radius: 8px;
+    color: #e8e8e8;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s;
+    margin-bottom: 18px;
+  }
+  input:focus { border-color: #6c63ff; }
+  button {
+    width: 100%;
+    padding: 12px;
+    background: #6c63ff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    transition: background 0.15s, transform 0.1s;
+  }
+  button:hover  { background: #7c74ff; }
+  button:active { transform: scale(0.98); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="logo">
+    <span>Exam<em>Hub</em></span>
+    <div class="subtitle">Admin Portal</div>
+  </div>
+
+  <% if (error) { %>
+    <div class="error-box"><%= error %></div>
+  <% } %>
+
+  <form method="POST" action="/admin/login">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" autocomplete="off" required autofocus>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+
+    <button type="submit">Sign In</button>
+  </form>
+</div>
+</body>
+</html>
