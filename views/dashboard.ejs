@@ -12,8 +12,6 @@
     color: #e0e0e0;
     min-height: 100vh;
   }
-
-  /* NAV */
   nav {
     background: #1a1a1a;
     border-bottom: 1px solid #2a2a2a;
@@ -28,8 +26,8 @@
   }
   .nav-brand { font-size: 17px; font-weight: 700; color: #fff; }
   .nav-brand em { color: #6c63ff; font-style: normal; }
-  .nav-right { display: flex; align-items: center; gap: 20px; }
-  .nav-right .tag {
+  .nav-right { display: flex; align-items: center; gap: 16px; }
+  .tag {
     font-size: 11px;
     background: #222;
     border: 1px solid #333;
@@ -37,22 +35,15 @@
     padding: 3px 10px;
     color: #aaa;
   }
-  .nav-right a {
-    font-size: 13px;
-    color: #888;
-    text-decoration: none;
-    transition: color 0.15s;
-  }
+  .nav-right a { font-size: 13px; color: #666; text-decoration: none; }
   .nav-right a:hover { color: #fff; }
 
-  /* LAYOUT */
-  .container { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+  .container { max-width: 1260px; margin: 0 auto; padding: 32px 24px; }
 
-  /* STAT CARDS */
   .stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
     margin-bottom: 36px;
   }
   .stat-card {
@@ -61,60 +52,31 @@
     border-radius: 12px;
     padding: 20px 22px;
   }
-  .stat-label {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    color: #666;
-    margin-bottom: 8px;
-  }
-  .stat-value {
-    font-size: 28px;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: -1px;
-  }
+  .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: #555; margin-bottom: 8px; }
+  .stat-value { font-size: 26px; font-weight: 700; color: #fff; letter-spacing: -1px; }
   .stat-value.purple { color: #6c63ff; }
   .stat-value.green  { color: #4ade80; }
   .stat-value.red    { color: #f87171; }
+  .stat-value.blue   { color: #38bdf8; }
 
-  /* SECTIONS */
   .section-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 14px;
   }
-  .section-title {
-    font-size: 14px;
-    font-weight: 600;
-    color: #bbb;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .section-title .dot {
-    display: inline-block;
-    width: 7px; height: 7px;
-    border-radius: 50%;
-    margin-right: 8px;
-  }
-  .dot-blue  { background: #6c63ff; }
-  .dot-red   { background: #f87171; }
+  .section-title { font-size: 13px; font-weight: 600; color: #bbb; text-transform: uppercase; letter-spacing: 0.5px; }
+  .section-title .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 8px; }
+  .dot-blue { background: #6c63ff; }
+  .dot-red  { background: #f87171; }
 
   .clear-btn {
-    font-size: 12px;
-    color: #555;
-    background: none;
-    border: 1px solid #2a2a2a;
-    border-radius: 6px;
-    padding: 5px 12px;
-    cursor: pointer;
-    transition: color 0.15s, border-color 0.15s;
+    font-size: 12px; color: #555; background: none;
+    border: 1px solid #2a2a2a; border-radius: 6px;
+    padding: 5px 12px; cursor: pointer;
   }
   .clear-btn:hover { color: #f87171; border-color: #5c2020; }
 
-  /* TABLES */
   .table-wrap {
     background: #1a1a1a;
     border: 1px solid #252525;
@@ -125,61 +87,38 @@
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   thead tr { background: #141414; }
   th {
-    text-align: left;
-    padding: 11px 16px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: #555;
-    border-bottom: 1px solid #222;
+    text-align: left; padding: 11px 16px;
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    color: #555; border-bottom: 1px solid #222;
   }
-  td {
-    padding: 11px 16px;
-    border-bottom: 1px solid #1e1e1e;
-    color: #ccc;
-    vertical-align: top;
-  }
+  td { padding: 11px 16px; border-bottom: 1px solid #1e1e1e; color: #ccc; vertical-align: top; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: #1e1e1e; }
   .mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; }
-  .badge {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 4px;
-    font-size: 11px;
-    font-weight: 600;
-  }
-  .badge-ok  { background: #1a2e1a; color: #4ade80; }
-  .badge-err { background: #2d1a1a; color: #f87171; }
-  .badge-type { background: #1e1e2e; color: #818cf8; }
+
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-ok     { background: #1a2e1a; color: #4ade80; }
+  .badge-err    { background: #2d1a1a; color: #f87171; }
+  .badge-type   { background: #1e1e2e; color: #818cf8; }
+  .badge-vision { background: #0e2233; color: #38bdf8; }
+  .badge-text   { background: #1e1e1e; color: #666; }
 
   .answer-pill {
-    display: inline-block;
-    width: 28px; height: 28px;
-    border-radius: 50%;
-    background: #6c63ff22;
-    border: 1px solid #6c63ff55;
-    color: #6c63ff;
-    font-weight: 700;
-    font-size: 13px;
-    text-align: center;
-    line-height: 26px;
+    display: inline-block; width: 28px; height: 28px;
+    border-radius: 50%; background: #6c63ff22;
+    border: 1px solid #6c63ff55; color: #6c63ff;
+    font-weight: 700; font-size: 13px;
+    text-align: center; line-height: 26px;
   }
-  .empty-row td {
-    text-align: center;
-    color: #444;
-    padding: 28px;
-    font-size: 13px;
-  }
-
+  .empty-row td { text-align: center; color: #444; padding: 28px; font-size: 13px; }
   .ms { color: #555; font-size: 11px; }
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-brand">Exam<em>Hub</em> <span style="font-weight:400;color:#555;font-size:13px;margin-left:6px;">Proxy</span></div>
+  <div class="nav-brand">Exam<em>Hub</em> <span style="font-weight:400;color:#555;font-size:13px;margin-left:6px">Proxy</span></div>
   <div class="nav-right">
     <span class="tag">Model: <%= model %></span>
     <span class="tag">Up: <%= uptime %></span>
@@ -196,8 +135,12 @@
       <div class="stat-value purple"><%= totalRequests %></div>
     </div>
     <div class="stat-card">
-      <div class="stat-label">Logged Requests</div>
-      <div class="stat-value"><%= requestLog.length %></div>
+      <div class="stat-label">Vision Requests</div>
+      <div class="stat-value blue"><%= requestLog.filter(r => r.isVision).length %></div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Text Requests</div>
+      <div class="stat-value"><%= requestLog.filter(r => !r.isVision).length %></div>
     </div>
     <div class="stat-card">
       <div class="stat-label">Errors</div>
@@ -226,6 +169,7 @@
           <th>#</th>
           <th>Time</th>
           <th>IP</th>
+          <th>Mode</th>
           <th>Prompt</th>
           <th>Answer</th>
           <th>Status</th>
@@ -234,14 +178,23 @@
       </thead>
       <tbody>
         <% if (requestLog.length === 0) { %>
-          <tr class="empty-row"><td colspan="7">No requests yet</td></tr>
+          <tr class="empty-row"><td colspan="8">No requests yet</td></tr>
         <% } else { %>
           <% requestLog.forEach(r => { %>
           <tr>
             <td class="mono" style="color:#555"><%= r.id %></td>
             <td class="mono" style="color:#555;white-space:nowrap"><%= r.ts.toLocaleTimeString() %></td>
             <td class="mono"><%= r.ip %></td>
-            <td style="max-width:340px;word-break:break-word;color:#999"><%= r.promptSnippet %><%- r.promptSnippet.length >= 120 ? '<span style="color:#444">…</span>' : '' %></td>
+            <td>
+              <% if (r.isVision) { %>
+                <span class="badge badge-vision">📷 Vision</span>
+              <% } else { %>
+                <span class="badge badge-text">Text</span>
+              <% } %>
+            </td>
+            <td style="max-width:300px;word-break:break-word;color:#999">
+              <%= r.promptSnippet %><%- r.promptSnippet.length >= 120 ? '<span style="color:#444">…</span>' : '' %>
+            </td>
             <td>
               <% const single = r.answer.trim().length <= 2 && /^[A-D]$/i.test(r.answer.trim()); %>
               <% if (single) { %>
@@ -296,7 +249,6 @@
 </div>
 
 <script>
-  /* Auto-refresh every 15 seconds */
   setTimeout(() => location.reload(), 15000);
 </script>
 </body>
