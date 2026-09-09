@@ -5,123 +5,89 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ExamHub — Dashboard</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: #0f0f0f;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    color: #e0e0e0;
-    min-height: 100vh;
-  }
-  nav {
-    background: #1a1a1a;
-    border-bottom: 1px solid #2a2a2a;
-    padding: 0 28px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  .nav-brand { font-size: 17px; font-weight: 700; color: #fff; }
-  .nav-brand em { color: #6c63ff; font-style: normal; }
-  .nav-right { display: flex; align-items: center; gap: 16px; }
-  .tag {
-    font-size: 11px;
-    background: #222;
-    border: 1px solid #333;
-    border-radius: 20px;
-    padding: 3px 10px;
-    color: #aaa;
-  }
-  .nav-right a { font-size: 13px; color: #666; text-decoration: none; }
-  .nav-right a:hover { color: #fff; }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  body{background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#111827;min-height:100vh}
 
-  .container { max-width: 1260px; margin: 0 auto; padding: 32px 24px; }
+  /* NAV */
+  nav{background:#fff;border-bottom:1px solid #e5e7eb;padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+  .nav-brand{font-size:17px;font-weight:700;color:#111}
+  .nav-brand em{color:#6c63ff;font-style:normal}
+  .nav-tabs{display:flex;gap:2px;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:8px;padding:3px}
+  .nav-tabs a{padding:5px 16px;border-radius:6px;font-size:13px;font-weight:500;color:#6b7280;text-decoration:none;transition:all .15s}
+  .nav-tabs a.active,.nav-tabs a:hover{background:#fff;color:#111;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+  .nav-right{display:flex;align-items:center;gap:12px}
+  .tag{font-size:11px;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:20px;padding:3px 10px;color:#6b7280}
+  .nav-right a{font-size:13px;color:#6b7280;text-decoration:none}
+  .nav-right a:hover{color:#111}
 
-  .stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-    gap: 14px;
-    margin-bottom: 36px;
-  }
-  .stat-card {
-    background: #1a1a1a;
-    border: 1px solid #252525;
-    border-radius: 12px;
-    padding: 20px 22px;
-  }
-  .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: #555; margin-bottom: 8px; }
-  .stat-value { font-size: 26px; font-weight: 700; color: #fff; letter-spacing: -1px; }
-  .stat-value.purple { color: #6c63ff; }
-  .stat-value.green  { color: #4ade80; }
-  .stat-value.red    { color: #f87171; }
-  .stat-value.blue   { color: #38bdf8; }
+  /* LAYOUT */
+  .container{max-width:1360px;margin:0 auto;padding:28px 24px}
 
-  .section-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 14px;
-  }
-  .section-title { font-size: 13px; font-weight: 600; color: #bbb; text-transform: uppercase; letter-spacing: 0.5px; }
-  .section-title .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 8px; }
-  .dot-blue { background: #6c63ff; }
-  .dot-red  { background: #f87171; }
+  /* STATS */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:28px}
+  .stat-card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:18px 20px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .stat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#9ca3af;margin-bottom:6px}
+  .stat-value{font-size:26px;font-weight:700;letter-spacing:-1px;color:#111}
+  .purple{color:#6c63ff} .green{color:#16a34a} .red{color:#dc2626} .blue{color:#2563eb}
 
-  .clear-btn {
-    font-size: 12px; color: #555; background: none;
-    border: 1px solid #2a2a2a; border-radius: 6px;
-    padding: 5px 12px; cursor: pointer;
-  }
-  .clear-btn:hover { color: #f87171; border-color: #5c2020; }
+  /* SECTION */
+  .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+  .section-title{font-size:13px;font-weight:600;color:#374151;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+  .dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+  .dot-blue{background:#6c63ff} .dot-red{background:#dc2626}
+  .clear-btn{font-size:12px;color:#9ca3af;background:none;border:1px solid #e5e7eb;border-radius:6px;padding:5px 12px;cursor:pointer;transition:all .15s}
+  .clear-btn:hover{color:#dc2626;border-color:#fca5a5}
 
-  .table-wrap {
-    background: #1a1a1a;
-    border: 1px solid #252525;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 36px;
-  }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  thead tr { background: #141414; }
-  th {
-    text-align: left; padding: 11px 16px;
-    font-size: 11px; font-weight: 600;
-    text-transform: uppercase; letter-spacing: 0.5px;
-    color: #555; border-bottom: 1px solid #222;
-  }
-  td { padding: 11px 16px; border-bottom: 1px solid #1e1e1e; color: #ccc; vertical-align: top; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: #1e1e1e; }
-  .mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; }
+  /* TABLE */
+  .table-wrap{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-bottom:28px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead tr{background:#f9fafb}
+  th{text-align:left;padding:11px 16px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#9ca3af;border-bottom:1px solid #e5e7eb;white-space:nowrap}
+  td{padding:11px 16px;border-bottom:1px solid #f3f4f6;color:#374151;vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  tbody tr.clickable{cursor:pointer;transition:background .1s}
+  tbody tr.clickable:hover td{background:#fafafa}
+  .mono{font-family:'SF Mono','Fira Code',monospace;font-size:11px;color:#6b7280}
+  .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+  .badge-ok{background:#dcfce7;color:#16a34a}
+  .badge-type{background:#ede9fe;color:#7c3aed}
+  .badge-vision{background:#dbeafe;color:#2563eb}
+  .badge-text{background:#f3f4f6;color:#9ca3af}
+  .answer-pill{display:inline-block;width:28px;height:28px;border-radius:50%;background:#ede9fe;border:1px solid #c4b5fd;color:#6c63ff;font-weight:700;font-size:13px;text-align:center;line-height:26px}
+  .empty-row td{text-align:center;color:#9ca3af;padding:32px;font-size:13px}
+  .ms{color:#9ca3af;font-size:11px}
+  .prompt-preview{color:#6b7280;max-width:340px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
+  .answer-preview{max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px}
+  .view-hint{font-size:10px;color:#d1d5db;margin-left:4px}
 
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
-  .badge-ok     { background: #1a2e1a; color: #4ade80; }
-  .badge-err    { background: #2d1a1a; color: #f87171; }
-  .badge-type   { background: #1e1e2e; color: #818cf8; }
-  .badge-vision { background: #0e2233; color: #38bdf8; }
-  .badge-text   { background: #1e1e1e; color: #666; }
-
-  .answer-pill {
-    display: inline-block; width: 28px; height: 28px;
-    border-radius: 50%; background: #6c63ff22;
-    border: 1px solid #6c63ff55; color: #6c63ff;
-    font-weight: 700; font-size: 13px;
-    text-align: center; line-height: 26px;
-  }
-  .empty-row td { text-align: center; color: #444; padding: 28px; font-size: 13px; }
-  .ms { color: #555; font-size: 11px; }
+  /* MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:1000;align-items:center;justify-content:center;padding:24px}
+  .modal-overlay.open{display:flex}
+  .modal{background:#fff;border-radius:16px;width:100%;max-width:720px;max-height:90vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+  .modal-header{padding:20px 24px 16px;border-bottom:1px solid #f3f4f6;display:flex;align-items:flex-start;justify-content:space-between;flex-shrink:0}
+  .modal-title{font-size:16px;font-weight:700;color:#111}
+  .modal-meta{font-size:12px;color:#9ca3af;margin-top:3px}
+  .modal-close{background:none;border:none;font-size:20px;color:#9ca3af;cursor:pointer;padding:2px 6px;border-radius:6px;line-height:1;transition:color .15s}
+  .modal-close:hover{color:#111}
+  .modal-body{padding:20px 24px;overflow-y:auto;flex:1}
+  .modal-section{margin-bottom:20px}
+  .modal-section:last-child{margin-bottom:0}
+  .modal-section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:#9ca3af;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .modal-content{background:#f9fafb;border:1px solid #e5e7eb;border-radius:8px;padding:14px 16px;font-size:13px;color:#374151;white-space:pre-wrap;word-break:break-word;line-height:1.6;max-height:280px;overflow-y:auto}
+  .modal-content.answer{background:#fafffe;border-color:#bbf7d0}
+  .modal-footer{padding:14px 24px;border-top:1px solid #f3f4f6;display:flex;align-items:center;gap:10px;flex-shrink:0;background:#fafafa}
+  .meta-pill{font-size:11px;background:#f3f4f6;border:1px solid #e5e7eb;border-radius:20px;padding:3px 10px;color:#6b7280}
+  .meta-pill.green{background:#dcfce7;border-color:#bbf7d0;color:#16a34a}
+  .meta-pill.blue{background:#dbeafe;border-color:#bfdbfe;color:#2563eb}
 </style>
 </head>
 <body>
 
 <nav>
-  <div class="nav-brand">Exam<em>Hub</em> <span style="font-weight:400;color:#555;font-size:13px;margin-left:6px">Proxy</span></div>
-  <div style="display:flex;gap:4px;background:#141414;border:1px solid #222;border-radius:10px;padding:4px;">
-    <a href="/admin/dashboard" style="padding:6px 16px;border-radius:7px;font-size:13px;font-weight:500;color:#fff;background:#252525;text-decoration:none;">Requests</a>
-    <a href="/admin/whitelist" style="padding:6px 16px;border-radius:7px;font-size:13px;font-weight:500;color:#666;text-decoration:none;">Whitelist</a>
+  <div class="nav-brand">Exam<em>Hub</em> <span style="font-weight:400;color:#9ca3af;font-size:13px;margin-left:6px">Proxy</span></div>
+  <div class="nav-tabs">
+    <a href="/admin/dashboard" class="active">Requests</a>
+    <a href="/admin/whitelist">Whitelist</a>
   </div>
   <div class="nav-right">
     <span class="tag">Model: <%= model %></span>
@@ -134,33 +100,16 @@
 
   <!-- STATS -->
   <div class="stats">
-    <div class="stat-card">
-      <div class="stat-label">Total Requests</div>
-      <div class="stat-value purple"><%= totalRequests %></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Vision Requests</div>
-      <div class="stat-value blue"><%= requestLog.filter(r => r.isVision).length %></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Text Requests</div>
-      <div class="stat-value"><%= requestLog.filter(r => !r.isVision).length %></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Errors</div>
-      <div class="stat-value red"><%= errorLog.length %></div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Success Rate</div>
-      <div class="stat-value green">
-        <%= totalRequests > 0 ? Math.round((totalRequests - errorLog.length) / totalRequests * 100) : 100 %>%
-      </div>
-    </div>
+    <div class="stat-card"><div class="stat-label">Total Requests</div><div class="stat-value purple"><%= totalRequests %></div></div>
+    <div class="stat-card"><div class="stat-label">Vision</div><div class="stat-value blue"><%= requestLog.filter(r=>r.isVision).length %></div></div>
+    <div class="stat-card"><div class="stat-label">Text</div><div class="stat-value"><%= requestLog.filter(r=>!r.isVision).length %></div></div>
+    <div class="stat-card"><div class="stat-label">Errors</div><div class="stat-value red"><%= errorLog.length %></div></div>
+    <div class="stat-card"><div class="stat-label">Success Rate</div><div class="stat-value green"><%= totalRequests>0?Math.round((totalRequests-errorLog.length)/totalRequests*100):100 %>%</div></div>
   </div>
 
   <!-- REQUEST LOG -->
   <div class="section-header">
-    <div class="section-title"><span class="dot dot-blue"></span>Request Log</div>
+    <div class="section-title"><span class="dot dot-blue"></span>Request Log <span style="font-size:11px;color:#9ca3af;font-weight:400;text-transform:none;letter-spacing:0">— click any row to see full content</span></div>
     <form method="POST" action="/admin/clear" style="display:inline">
       <button class="clear-btn" type="submit" onclick="return confirm('Clear all logs?')">Clear all</button>
     </form>
@@ -168,50 +117,44 @@
 
   <div class="table-wrap">
     <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Time</th>
-          <th>IP</th>
-          <th>Mode</th>
-          <th>Prompt</th>
-          <th>Answer</th>
-          <th>Status</th>
-          <th>Ms</th>
-        </tr>
-      </thead>
+      <thead><tr>
+        <th>#</th><th>Time</th><th>IP</th><th>Mode</th><th>Prompt</th><th>Answer</th><th>Status</th><th>Ms</th>
+      </tr></thead>
       <tbody>
-        <% if (requestLog.length === 0) { %>
+        <% if(requestLog.length===0){ %>
           <tr class="empty-row"><td colspan="8">No requests yet</td></tr>
-        <% } else { %>
-          <% requestLog.forEach(r => { %>
-          <tr>
-            <td class="mono" style="color:#555"><%= r.id %></td>
-            <td class="mono" style="color:#555;white-space:nowrap"><%= r.ts.toLocaleTimeString() %></td>
+        <% } else { requestLog.forEach(r=>{ %>
+          <%
+            const isSingleLetter = r.answer && r.answer.trim().length<=2 && /^[A-D]$/i.test(r.answer.trim());
+            const promptPreview  = (r.prompt||'').replace(/\n/g,' ').slice(0,80);
+            const answerPreview  = (r.answer||'').replace(/\n/g,' ').slice(0,40);
+          %>
+          <tr class="clickable"
+              onclick="openModal(
+                '<%= r.id %>',
+                '<%= r.ts.toLocaleString().replace(/'/g,`\\'`) %>',
+                '<%= r.ip %>',
+                '<%= r.isVision ? 'Vision' : 'Text' %>',
+                '<%= r.ms %>ms',
+                '<%= (r.prompt||'').replace(/\\/g,'\\\\').replace(/'/g,`\\'`).replace(/\n/g,'\\n').replace(/\r/g,'') %>',
+                '<%= (r.answer||'').replace(/\\/g,'\\\\').replace(/'/g,`\\'`).replace(/\n/g,'\\n').replace(/\r/g,'') %>'
+              )">
+            <td class="mono"><%= r.id %></td>
+            <td class="mono" style="white-space:nowrap"><%= r.ts.toLocaleTimeString() %></td>
             <td class="mono"><%= r.ip %></td>
+            <td><% if(r.isVision){ %><span class="badge badge-vision">📷 Vision</span><% }else{ %><span class="badge badge-text">Text</span><% } %></td>
+            <td><div class="prompt-preview"><%= promptPreview %><%- (r.prompt||'').length>80?'…':'' %></div></td>
             <td>
-              <% if (r.isVision) { %>
-                <span class="badge badge-vision">📷 Vision</span>
-              <% } else { %>
-                <span class="badge badge-text">Text</span>
-              <% } %>
-            </td>
-            <td style="max-width:300px;word-break:break-word;color:#999">
-              <%= r.promptSnippet %><%- r.promptSnippet.length >= 120 ? '<span style="color:#444">…</span>' : '' %>
-            </td>
-            <td>
-              <% const single = r.answer.trim().length <= 2 && /^[A-D]$/i.test(r.answer.trim()); %>
-              <% if (single) { %>
+              <% if(isSingleLetter){ %>
                 <span class="answer-pill"><%= r.answer.trim().toUpperCase() %></span>
               <% } else { %>
-                <span style="color:#aaa;font-size:12px"><%= r.answer %></span>
+                <div class="answer-preview"><%= answerPreview %><%- (r.answer||'').length>40?'…':'' %></div>
               <% } %>
             </td>
             <td><span class="badge badge-ok"><%= r.status %></span></td>
             <td class="ms"><%= r.ms %>ms</td>
           </tr>
-          <% }); %>
-        <% } %>
+        <% }); } %>
       </tbody>
     </table>
   </div>
@@ -220,40 +163,88 @@
   <div class="section-header">
     <div class="section-title"><span class="dot dot-red"></span>Error Log</div>
   </div>
-
   <div class="table-wrap">
     <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Time</th>
-          <th>IP</th>
-          <th>Type</th>
-          <th>Message</th>
-        </tr>
-      </thead>
+      <thead><tr><th>#</th><th>Time</th><th>IP</th><th>Type</th><th>Message</th></tr></thead>
       <tbody>
-        <% if (errorLog.length === 0) { %>
-          <tr class="empty-row"><td colspan="5">No errors logged</td></tr>
-        <% } else { %>
-          <% errorLog.forEach(e => { %>
+        <% if(errorLog.length===0){ %>
+          <tr class="empty-row"><td colspan="5">No errors</td></tr>
+        <% } else { errorLog.forEach(e=>{ %>
           <tr>
-            <td class="mono" style="color:#555"><%= e.id %></td>
-            <td class="mono" style="color:#555;white-space:nowrap"><%= e.ts.toLocaleTimeString() %></td>
+            <td class="mono"><%= e.id %></td>
+            <td class="mono" style="white-space:nowrap"><%= e.ts.toLocaleTimeString() %></td>
             <td class="mono"><%= e.ip %></td>
             <td><span class="badge badge-type"><%= e.type %></span></td>
-            <td style="color:#f87171"><%= e.message %></td>
+            <td style="color:#dc2626"><%= e.message %></td>
           </tr>
-          <% }); %>
-        <% } %>
+        <% }); } %>
       </tbody>
     </table>
   </div>
 
 </div>
 
+<!-- DETAIL MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeOnBg(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Request #<span id="mId"></span></div>
+        <div class="modal-meta" id="mMeta"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section">
+        <div class="modal-section-label">📝 Full Prompt</div>
+        <div class="modal-content" id="mPrompt"></div>
+      </div>
+      <div class="modal-section">
+        <div class="modal-section-label">✅ AI Answer</div>
+        <div class="modal-content answer" id="mAnswer"></div>
+      </div>
+    </div>
+    <div class="modal-footer" id="mFooter"></div>
+  </div>
+</div>
+
 <script>
-  setTimeout(() => location.reload(), 15000);
+function openModal(id, ts, ip, mode, ms, prompt, answer) {
+  document.getElementById('mId').textContent     = id;
+  document.getElementById('mMeta').textContent   = ts + ' · ' + ip;
+  document.getElementById('mPrompt').textContent = prompt.replace(/\\n/g, '\n');
+  document.getElementById('mAnswer').textContent = answer.replace(/\\n/g, '\n');
+
+  var footer = document.getElementById('mFooter');
+  var modeClass = mode === 'Vision' ? 'blue' : '';
+  footer.innerHTML =
+    '<span class="meta-pill green">' + ms + '</span>' +
+    '<span class="meta-pill ' + modeClass + '">' + mode + '</span>' +
+    '<span class="meta-pill">IP: ' + ip + '</span>';
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeOnBg(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeModal();
+});
+
+/* Auto-refresh every 20s if modal is closed */
+setInterval(function() {
+  if (!document.getElementById('modalOverlay').classList.contains('open')) {
+    location.reload();
+  }
+}, 20000);
 </script>
 </body>
 </html>
