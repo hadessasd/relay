@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ExamHub — Whitelist</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0f0f0f; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #e0e0e0; min-height: 100vh; }
+  nav { background: #1a1a1a; border-bottom: 1px solid #2a2a2a; padding: 0 28px; height: 56px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 10; }
+  .nav-brand { font-size: 17px; font-weight: 700; color: #fff; }
+  .nav-brand em { color: #6c63ff; font-style: normal; }
+  .nav-links { display: flex; gap: 8px; }
+  .nav-links a { font-size: 13px; color: #666; text-decoration: none; padding: 6px 14px; border-radius: 6px; transition: all 0.15s; }
+  .nav-links a:hover { color: #fff; background: #252525; }
+  .nav-links a.active { color: #fff; background: #252525; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .nav-right a { font-size: 13px; color: #666; text-decoration: none; }
+  .nav-right a:hover { color: #fff; }
+
+  .container { max-width: 1320px; margin: 0 auto; padding: 32px 24px; }
+
+  /* STATS */
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 32px; max-width: 540px; }
+  .stat-card { background: #1a1a1a; border: 1px solid #252525; border-radius: 12px; padding: 18px 20px; }
+  .stat-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: #555; margin-bottom: 6px; }
+  .stat-value { font-size: 26px; font-weight: 700; letter-spacing: -1px; }
+  .green { color: #4ade80; } .yellow { color: #fbbf24; } .red { color: #f87171; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 4px; margin-bottom: 20px; background: #141414; border: 1px solid #222; border-radius: 10px; padding: 4px; width: fit-content; }
+  .tab-btn { padding: 7px 20px; border: none; background: none; color: #666; font-size: 13px; font-weight: 500; border-radius: 7px; cursor: pointer; transition: all 0.15s; }
+  .tab-btn.active { background: #252525; color: #fff; }
+  .tab-btn .count { display: inline-block; background: #333; color: #aaa; font-size: 10px; font-weight: 700; border-radius: 10px; padding: 1px 6px; margin-left: 6px; }
+  .tab-btn.active .count { background: #6c63ff33; color: #9b95ff; }
+
+  /* SEARCH */
+  .search-wrap { margin-bottom: 16px; }
+  .search-input { background: #1a1a1a; border: 1px solid #2a2a2a; border-radius: 8px; color: #e0e0e0; font-size: 13px; padding: 9px 14px; width: 320px; outline: none; transition: border-color 0.15s; }
+  .search-input:focus { border-color: #6c63ff; }
+  .search-input::placeholder { color: #444; }
+
+  /* TABLE */
+  .table-wrap { background: #1a1a1a; border: 1px solid #252525; border-radius: 12px; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: #141414; }
+  th { text-align: left; padding: 11px 16px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #555; border-bottom: 1px solid #222; white-space: nowrap; }
+  td { padding: 11px 16px; border-bottom: 1px solid #1e1e1e; color: #ccc; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #1e1e1e; }
+  .mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: #888; }
+  .empty-row td { text-align: center; color: #444; padding: 36px; font-size: 13px; }
+
+  /* BADGE */
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-active  { background: #1a2e1a; color: #4ade80; }
+  .badge-pending { background: #2d2a14; color: #fbbf24; }
+  .badge-denied  { background: #2d1a1a; color: #f87171; }
+
+  /* LABEL EDIT */
+  .label-wrap { display: flex; align-items: center; gap: 6px; }
+  .label-text { color: #e0e0e0; }
+  .label-text.empty { color: #444; font-style: italic; }
+  .edit-label-btn { background: none; border: none; color: #555; cursor: pointer; font-size: 13px; padding: 2px 5px; border-radius: 4px; transition: color 0.15s; }
+  .edit-label-btn:hover { color: #6c63ff; }
+  .label-form { display: none; align-items: center; gap: 6px; }
+  .label-input { background: #111; border: 1px solid #6c63ff; border-radius: 5px; color: #e0e0e0; font-size: 12px; padding: 4px 9px; outline: none; width: 140px; }
+  .label-save-btn { background: #6c63ff; border: none; border-radius: 5px; color: #fff; font-size: 11px; font-weight: 600; padding: 4px 10px; cursor: pointer; }
+  .label-cancel-btn { background: none; border: none; color: #666; font-size: 11px; cursor: pointer; }
+
+  /* ACTION BUTTONS */
+  .action-wrap { display: flex; gap: 6px; flex-wrap: nowrap; }
+  .btn { display: inline-block; padding: 5px 12px; border: none; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: opacity 0.15s; text-decoration: none; }
+  .btn:hover { opacity: 0.8; }
+  .btn-approve { background: #1a2e1a; color: #4ade80; border: 1px solid #2a4a2a; }
+  .btn-deny    { background: #2d1a1a; color: #f87171; border: 1px solid #4a2a2a; }
+  .btn-revoke  { background: #2d1a1a; color: #f87171; border: 1px solid #4a2a2a; }
+  .btn-delete  { background: #1e1e1e; color: #555;    border: 1px solid #2a2a2a; }
+
+  /* REASON BOX */
+  .reason-text { font-size: 12px; color: #999; max-width: 200px; word-break: break-word; }
+
+  /* GEO */
+  .geo { font-size: 12px; color: #888; white-space: nowrap; }
+  .geo-flag { font-size: 14px; margin-right: 4px; }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .last-seen { font-size: 11px; color: #555; white-space: nowrap; }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-brand">Exam<em>Hub</em></div>
+  <div class="nav-links">
+    <a href="/admin/dashboard">Requests</a>
+    <a href="/admin/whitelist" class="active">Whitelist</a>
+  </div>
+  <div class="nav-right"><a href="/admin/logout">Logout</a></div>
+</nav>
+
+<div class="container">
+
+  <div class="stats">
+    <div class="stat-card"><div class="stat-label">Active</div><div class="stat-value green"><%= active.length %></div></div>
+    <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value yellow"><%= pending.length %></div></div>
+    <div class="stat-card"><div class="stat-label">Denied</div><div class="stat-value red"><%= denied.length %></div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('active',this)">Active <span class="count"><%= active.length %></span></button>
+    <button class="tab-btn" onclick="switchTab('pending',this)">Pending <span class="count"><%= pending.length %></span></button>
+    <button class="tab-btn" onclick="switchTab('denied',this)">Denied <span class="count"><%= denied.length %></span></button>
+  </div>
+
+  <div class="search-wrap">
+    <input class="search-input" id="searchInput" placeholder="Search by label, computer name, serial, IP, city…" oninput="filterRows(this.value)">
+  </div>
+
+  <!-- ACTIVE TAB -->
+  <div id="tab-active" class="tab-content active">
+    <div class="table-wrap">
+      <table id="tbl-active">
+        <thead><tr>
+          <th>Label</th><th>Computer</th><th>Serial</th><th>IP</th><th>Location</th><th>Last Seen</th><th>Actions</th>
+        </tr></thead>
+        <tbody>
+          <% if (active.length === 0) { %>
+            <tr class="empty-row"><td colspan="7">No active users</td></tr>
+          <% } else { active.forEach(u => { %>
+          <tr data-search="<%= [u.label,u.computerName,u.serialDisplay,u.ip,u.city,u.country].join(' ').toLowerCase() %>">
+            <td>
+              <div class="label-wrap" id="lw-<%= u.id %>">
+                <span class="label-text <%= u.label ? '' : 'empty' %>" id="lt-<%= u.id %>"><%= u.label || 'No label' %></span>
+                <button class="edit-label-btn" onclick="startEdit('<%= u.id %>','<%= (u.label||'').replace(/'/g,`\\'`) %>')">✎</button>
+              </div>
+              <div class="label-form" id="lf-<%= u.id %>">
+                <input class="label-input" id="li-<%= u.id %>" value="<%= u.label || '' %>" maxlength="60">
+                <button class="label-save-btn" onclick="saveLabel('<%= u.id %>')">Save</button>
+                <button class="label-cancel-btn" onclick="cancelEdit('<%= u.id %>')">✕</button>
+              </div>
+            </td>
+            <td><%= u.computerName || '—' %></td>
+            <td><span class="mono"><%= u.serialDisplay || u.sha256.slice(0,12)+'…' %></span></td>
+            <td><span class="mono"><%= u.ip %></span></td>
+            <td><span class="geo"><%= u.city %><% if(u.region){%>, <%= u.region %><% } %>, <%= u.country %></span></td>
+            <td><span class="last-seen"><%= u.lastSeen ? new Date(u.lastSeen).toLocaleString() : '—' %></span></td>
+            <td>
+              <div class="action-wrap">
+                <form method="POST" action="/admin/whitelist/<%= u.id %>/revoke" style="display:inline" onsubmit="return confirm('Revoke access?')">
+                  <button class="btn btn-revoke">Revoke</button>
+                </form>
+                <form method="POST" action="/admin/whitelist/<%= u.id %>/delete" style="display:inline" onsubmit="return confirm('Delete user?')">
+                  <button class="btn btn-delete">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% }); } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PENDING TAB -->
+  <div id="tab-pending" class="tab-content">
+    <div class="table-wrap">
+      <table id="tbl-pending">
+        <thead><tr>
+          <th>Computer</th><th>Serial</th><th>IP</th><th>Location</th><th>Reason</th><th>Requested</th><th>Actions</th>
+        </tr></thead>
+        <tbody>
+          <% if (pending.length === 0) { %>
+            <tr class="empty-row"><td colspan="7">No pending requests</td></tr>
+          <% } else { pending.forEach(u => { %>
+          <tr data-search="<%= [u.computerName,u.serialDisplay,u.ip,u.city,u.country,u.reason].join(' ').toLowerCase() %>">
+            <td><%= u.computerName || '—' %></td>
+            <td><span class="mono"><%= u.serialDisplay || u.sha256.slice(0,12)+'…' %></span></td>
+            <td><span class="mono"><%= u.ip %></span></td>
+            <td><span class="geo"><%= u.city %><% if(u.region){%>, <%= u.region %><% } %>, <%= u.country %></span></td>
+            <td><div class="reason-text"><%= u.reason || '—' %></div></td>
+            <td><span class="last-seen"><%= new Date(u.requestedAt).toLocaleString() %></span></td>
+            <td>
+              <div class="action-wrap">
+                <form method="POST" action="/admin/whitelist/<%= u.id %>/approve" style="display:inline">
+                  <button class="btn btn-approve">Approve</button>
+                </form>
+                <form method="POST" action="/admin/whitelist/<%= u.id %>/deny" style="display:inline">
+                  <button class="btn btn-deny">Deny</button>
+                </form>
+                <form method="POST" action="/admin/whitelist/<%= u.id %>/delete" style="display:inline">
+                  <button class="btn btn-delete">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% }); } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- DENIED TAB -->
+  <div id="tab-denied" class="tab-content">
+    <div class="table-wrap">
+      <table id="tbl-denied">
+        <thead><tr>
+          <th>Computer</th><th>Serial</th><th>IP</th><th>Location</th><th>Actions</th>
+        </tr></thead>
+        <tbody>
+          <% if (denied.length === 0) { %>
+            <tr class="empty-row"><td colspan="5">No denied users</td></tr>
+          <% } else { denied.forEach(u => { %>
+          <tr data-search="<%= [u.computerName,u.serialDisplay,u.ip,u.city,u.country].join(' ').toLowerCase() %>">
+            <td><%= u.computerName || '—' %></td>
+            <td><span class="mono"><%= u.serialDisplay || u.sha256.slice(0,12)+'…' %></span></td>
+            <td><span class="mono"><%= u.ip %></span></td>
+            <td><span class="geo"><%= u.city %><% if(u.region){%>, <%= u.region %><% } %>, <%= u.country %></span></td>
+            <td>
+              <div class="action-wrap">
+                <form method="POST" action="/admin/whitelist/<%= u.id %>/approve" style="display:inline">
+                  <button class="btn btn-approve">Re-approve</button>
+                </form>
+                <form method="POST" action="/admin/whitelist/<%= u.id %>/delete" style="display:inline" onsubmit="return confirm('Delete?')">
+                  <button class="btn btn-delete">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          <% }); } %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<script>
+var currentTab = 'active';
+
+function switchTab(name, btn) {
+  currentTab = name;
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  filterRows(document.getElementById('searchInput').value);
+}
+
+function filterRows(q) {
+  q = q.toLowerCase().trim();
+  var tbl = document.getElementById('tbl-' + currentTab);
+  if (!tbl) return;
+  tbl.querySelectorAll('tbody tr[data-search]').forEach(function(row) {
+    row.style.display = (!q || row.dataset.search.includes(q)) ? '' : 'none';
+  });
+}
+
+function startEdit(id, current) {
+  document.getElementById('lw-' + id).style.display = 'none';
+  var lf = document.getElementById('lf-' + id);
+  lf.style.display = 'flex';
+  var inp = document.getElementById('li-' + id);
+  inp.value = current;
+  inp.focus();
+  inp.onkeydown = function(e) { if (e.key === 'Enter') saveLabel(id); if (e.key === 'Escape') cancelEdit(id); };
+}
+
+function cancelEdit(id) {
+  document.getElementById('lf-' + id).style.display = 'none';
+  document.getElementById('lw-' + id).style.display = 'flex';
+}
+
+function saveLabel(id) {
+  var val = document.getElementById('li-' + id).value.trim();
+  fetch('/admin/whitelist/' + id + '/label', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ label: val })
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.ok) {
+      var lt = document.getElementById('lt-' + id);
+      if (data.label) { lt.textContent = data.label; lt.classList.remove('empty'); }
+      else            { lt.textContent = 'No label';  lt.classList.add('empty'); }
+    }
+    cancelEdit(id);
+  })
+  .catch(function() { cancelEdit(id); });
+}
+</script>
+</body>
+</html>
