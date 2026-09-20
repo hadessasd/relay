@@ -15,6 +15,7 @@ import { Route as HctRouteImport } from './routes/hct'
 import { Route as HeyRouteImport } from './routes/hey'
 import { Route as SellRouteImport } from './routes/sell'
 import { Route as StaffRouteImport } from './routes/staff'
+import { Route as ZipRouteImport } from './routes/zip'
 import { Route as CourseCourseIdRouteImport } from './routes/course.$courseId'
 import { Route as ShopListingIdRouteImport } from './routes/shop.$listingId'
 import { Route as UniUniIdRouteImport } from './routes/uni.$uniId'
@@ -52,6 +53,11 @@ const SellRoute = SellRouteImport.update({
 const StaffRoute = StaffRouteImport.update({
   id: '/staff',
   path: '/staff',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ZipRoute = ZipRouteImport.update({
+  id: '/zip',
+  path: '/zip',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CourseCourseIdRoute = CourseCourseIdRouteImport.update({
@@ -104,6 +110,7 @@ export interface FileRoutesByFullPath {
   '/hey': typeof HeyRoute
   '/sell': typeof SellRoute
   '/staff': typeof StaffRoute
+  '/zip': typeof ZipRoute
   '/course/$courseId': typeof CourseCourseIdRouteWithChildren
   '/shop/$listingId': typeof ShopListingIdRoute
   '/uni/$uniId': typeof UniUniIdRoute
@@ -120,6 +127,7 @@ export interface FileRoutesByTo {
   '/hey': typeof HeyRoute
   '/sell': typeof SellRoute
   '/staff': typeof StaffRoute
+  '/zip': typeof ZipRoute
   '/shop/$listingId': typeof ShopListingIdRoute
   '/uni/$uniId': typeof UniUniIdRoute
   '/course/$courseId/exam': typeof CourseCourseIdExamRoute
@@ -136,6 +144,7 @@ export interface FileRoutesById {
   '/hey': typeof HeyRoute
   '/sell': typeof SellRoute
   '/staff': typeof StaffRoute
+  '/zip': typeof ZipRoute
   '/course/$courseId': typeof CourseCourseIdRouteWithChildren
   '/shop/$listingId': typeof ShopListingIdRoute
   '/uni/$uniId': typeof UniUniIdRoute
@@ -154,6 +163,7 @@ export interface FileRouteTypes {
     | '/hey'
     | '/sell'
     | '/staff'
+    | '/zip'
     | '/course/$courseId'
     | '/shop/$listingId'
     | '/uni/$uniId'
@@ -170,6 +180,7 @@ export interface FileRouteTypes {
     | '/hey'
     | '/sell'
     | '/staff'
+    | '/zip'
     | '/shop/$listingId'
     | '/uni/$uniId'
     | '/course/$courseId/exam'
@@ -185,6 +196,7 @@ export interface FileRouteTypes {
     | '/hey'
     | '/sell'
     | '/staff'
+    | '/zip'
     | '/course/$courseId'
     | '/shop/$listingId'
     | '/uni/$uniId'
@@ -202,6 +214,7 @@ export interface RootRouteChildren {
   HeyRoute: typeof HeyRoute
   SellRoute: typeof SellRoute
   StaffRoute: typeof StaffRoute
+  ZipRoute: typeof ZipRoute
   CourseCourseIdRoute: typeof CourseCourseIdRouteWithChildren
   ShopListingIdRoute: typeof ShopListingIdRoute
   UniUniIdRoute: typeof UniUniIdRoute
@@ -249,6 +262,13 @@ declare module '@tanstack/react-router' {
       path: '/staff'
       fullPath: '/staff'
       preLoaderRoute: typeof StaffRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/zip': {
+      id: '/zip'
+      path: '/zip'
+      fullPath: '/zip'
+      preLoaderRoute: typeof ZipRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/course/$courseId': {
@@ -337,6 +357,7 @@ const rootRouteChildren: RootRouteChildren = {
   HeyRoute: HeyRoute,
   SellRoute: SellRoute,
   StaffRoute: StaffRoute,
+  ZipRoute: ZipRoute,
   CourseCourseIdRoute: CourseCourseIdRouteWithChildren,
   ShopListingIdRoute: ShopListingIdRoute,
   UniUniIdRoute: UniUniIdRoute,

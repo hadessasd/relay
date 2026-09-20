@@ -14,6 +14,12 @@ export function SiteHeader() {
       </Link>
       <nav className="flex items-center gap-2">
         <Link
+          to="/zip"
+          className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-fg"
+        >
+          Source zip
+        </Link>
+        <Link
           to="/sell"
           className="hidden min-h-11 items-center rounded-lg px-3 text-sm font-medium text-fg sm:inline-flex"
         >

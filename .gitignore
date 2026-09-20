@@ -12,4 +12,4 @@ artifacts
 .env
 .env.*
 coverage
-/tmp
+public/*.zip

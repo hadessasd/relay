@@ -3,14 +3,16 @@ services:
     name: kstudy-academy
     runtime: node
     plan: starter
-    buildCommand: npm ci && NITRO_PRESET=node-server npm run build
-    startCommand: node .output/server/index.mjs
+    buildCommand: bash render-build.sh
+    startCommand: node server.js
     healthCheckPath: /
     envVars:
       - key: NODE_VERSION
         value: "22"
       - key: NITRO_PRESET
         value: node-server
+      - key: NPM_CONFIG_PRODUCTION
+        value: "false"
       - key: HOST
         value: 0.0.0.0
       - key: NITRO_HOST
