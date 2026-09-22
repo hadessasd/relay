@@ -35,6 +35,7 @@ function ExamModulePage() {
       </p>
 
       <QuizPanel
+        key={`${course.id}:${mod.id}`}
         courseId={course.id}
         topicId={mod.id}
         mcqs={mod.mcqs}

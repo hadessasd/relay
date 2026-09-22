@@ -1,6 +1,7 @@
 import type { Course } from "./types";
+import { AI_FINAL_EXTRAS, AI_TOPIC_EXTRAS, paperToFrqOnly, topicToFrqOnly } from "./ai-frq";
 
-export const foundationsAi: Omit<Course, "examModules"> = {
+export const foundationsAiRaw: Omit<Course, "examModules"> = {
   id: "foundations-ai",
   code: "BUS · Foundations of AI",
   shortName: "Foundations of AI",
@@ -119,6 +120,32 @@ export const foundationsAi: Omit<Course, "examModules"> = {
           title: "Worked example",
           text: "AI caption: ‘Voted #1 in Sharjah! Show your Emirates ID for free dessert. Ends in 11 minutes.’ Fails gates 2, 3, 4, 6. New caption: ‘University City study corner. Karak AED 8. Quiet tables after 6pm.’ A person posts it.",
         },
+        { type: "h", text: "More pictures you can reuse in an FRQ" },
+        {
+          type: "cards",
+          items: [
+            {
+              kicker: "Omar · juice cart",
+              title: "Draft, then look",
+              body: "AI lists 10 student-combo names. Omar still checks the board price. It cannot see whether the blender is broken today.",
+            },
+            {
+              kicker: "Noor · poster",
+              title: "Invented #1",
+              body: "Smooth English wrote ‘Official #1 in the UAE.’ Noor deletes it. She posts: ‘University City. Karak AED 8.’",
+            },
+            {
+              kicker: "Khalid · stock",
+              title: "Thursday milk",
+              body: "AI can turn notes into a count sheet. It cannot taste the milk or know the supplier van is late.",
+            },
+            {
+              kicker: "Laila · HR",
+              title: "Invite, not hire",
+              body: "AI drafts a kind interview time. A named person still chooses who gets the job. No phones in the prompt.",
+            },
+          ],
+        },
       ],
       mcqs: [
         {
@@ -235,6 +262,27 @@ export const foundationsAi: Omit<Course, "examModules"> = {
             {
               title: "Not-good school use",
               body: "Do the whole assignment for me. Sit the quiz in my name. I cannot explain the answer. I hide that AI helped.",
+            },
+          ],
+        },
+        { type: "h", text: "More pictures" },
+        {
+          type: "cards",
+          items: [
+            {
+              kicker: "Yusuf",
+              title: "SWOT tutor",
+              body: "‘Act as an HCT tutor. Topic SWOT. Level first year. Four bullets, one café each. Do not write my assignment.’ Then he closes the chat and teaches Aisha.",
+            },
+            {
+              kicker: "Mariam",
+              title: "POLC quiz",
+              body: "AI writes 8 questions and waits. Mariam answers. If she peeks, she did not learn it yet.",
+            },
+            {
+              kicker: "Hamad",
+              title: "Not-good",
+              body: "‘Write my whole planning essay and hide that you helped.’ Smooth English, empty when the teacher asks.",
             },
           ],
         },
@@ -946,7 +994,7 @@ export const foundationsAi: Omit<Course, "examModules"> = {
   ],
   finalExam: {
     intro:
-      "Assessment 1 style paper. Eighteen mixed MCQs (one or two from each lesson) plus five short writings. New stories — Fatima, Yusuf, Aisha — not copies of the lesson quizzes. After you submit, every letter and every writing model opens.",
+      "Assessment 1 style paper — writing only, no MCQ. Short FRQs from every lesson, with café stories (Fatima, Yusuf, Aisha, Omar, Noor). After you submit, every model answer opens so you can compare.",
     mcqs: [
       {
         id: "af-q1",
@@ -1258,3 +1306,10 @@ export const foundationsAi: Omit<Course, "examModules"> = {
       "Study kindly. Look at the pictures in your head. Do the questions. If you can teach the answer to a friend, you are ready.",
   },
 };
+
+export const foundationsAi: Omit<Course, "examModules"> = {
+  ...foundationsAiRaw,
+  topics: foundationsAiRaw.topics.map((t) => topicToFrqOnly(t, AI_TOPIC_EXTRAS[t.id])),
+  finalExam: paperToFrqOnly(foundationsAiRaw.finalExam, AI_FINAL_EXTRAS),
+};
+

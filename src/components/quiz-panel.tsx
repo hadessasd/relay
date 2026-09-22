@@ -55,31 +55,39 @@ export function QuizPanel({
     [mcqs, writing],
   );
 
-  const [mcqAnswers, setMcqAnswers] = useState<Record<string, number>>(() => {
-    const start: Record<string, number> = {};
-    if (!existing) return start;
-    for (const q of mcqs) {
-      const v = existing.answers[q.id];
-      if (typeof v === "number") start[q.id] = v;
-    }
-    return start;
-  });
-  const [writingAnswers, setWritingAnswers] = useState<Record<string, string>>(() => {
-    const start: Record<string, string> = {};
-    if (!existing) return start;
-    for (const q of writing) {
-      const v = existing.answers[q.id];
-      if (typeof v === "string") start[q.id] = v;
-    }
-    return start;
-  });
-  const [submitted, setSubmitted] = useState(Boolean(existing));
+  const [mcqAnswers, setMcqAnswers] = useState<Record<string, number>>({});
+  const [writingAnswers, setWritingAnswers] = useState<Record<string, string>>({});
+  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [step, setStep] = useState(0);
   const [mode, setMode] = useState<"focus" | "list">("focus");
   const [hintId, setHintId] = useState<string | null>(null);
   const [left, setLeft] = useState(() => (timedMinutes ?? 0) * 60);
   const [timedOut, setTimedOut] = useState(false);
+
+  useEffect(() => {
+    const startMcq: Record<string, number> = {};
+    const startWrite: Record<string, string> = {};
+    if (existing) {
+      for (const q of mcqs) {
+        const v = existing.answers[q.id];
+        if (typeof v === "number") startMcq[q.id] = v;
+      }
+      for (const q of writing) {
+        const v = existing.answers[q.id];
+        if (typeof v === "string") startWrite[q.id] = v;
+      }
+    }
+    setMcqAnswers(startMcq);
+    setWritingAnswers(startWrite);
+    setSubmitted(Boolean(existing));
+    setError(null);
+    setStep(0);
+    setMode("focus");
+    setHintId(null);
+    setLeft((timedMinutes ?? 0) * 60);
+    setTimedOut(false);
+  }, [courseId, topicId, existing?.submittedAt, timedMinutes]);
 
   const score = useMemo(() => {
     let n = 0;
@@ -101,7 +109,7 @@ export function QuizPanel({
       const missingMcq = mcqs.some((q) => mcqAnswers[q.id] === undefined);
       const missingWrite = writing.some((q) => !(writingAnswers[q.id] ?? "").trim());
       if (missingMcq || missingWrite) {
-        setError("Answer every MCQ and writing question before you submit.");
+        setError("Answer every question before you submit.");
         const first = items.find((item) =>
           item.kind === "mcq" ? mcqAnswers[item.id] === undefined : !(writingAnswers[item.id] ?? "").trim(),
         );
@@ -188,8 +196,12 @@ export function QuizPanel({
         <div className="px-4 py-5 sm:px-6">
           <p className="max-w-2xl text-sm text-muted">
             {examMode
-              ? "The clock starts now. After you submit — or when time ends — every MCQ explanation and every writing model opens so you can compare."
-              : "One question at a time, or the full paper. After you submit, correct letters, explanations, and writing examples open automatically."}
+              ? mcqs.length
+                ? "The clock starts now. After you submit — or when time ends — every MCQ explanation, FRQ model, and writing example opens so you can compare."
+                : "The clock starts now. Writing only — no MCQ. After you submit — or when time ends — every model answer opens so you can compare."
+              : mcqs.length
+                ? "One question at a time, or the full paper. After you submit, letters, FRQ models, and writing examples open automatically."
+                : "Writing only — no MCQ. After you submit, every model answer opens so you can compare."}
           </p>
           {timedMinutes && !submitted ? (
             <p
@@ -224,6 +236,7 @@ export function QuizPanel({
           writingAnswers={writingAnswers}
           onRetry={retry}
           timedOut={timedOut}
+          namePrefix={`${courseId}:${topicId}`}
         />
       ) : (
         <>
@@ -241,6 +254,7 @@ export function QuizPanel({
               onPick={(id, oi) => setMcqAnswers((s) => ({ ...s, [id]: oi }))}
               onWrite={(id, value) => setWritingAnswers((s) => ({ ...s, [id]: value }))}
               onJump={setStep}
+              namePrefix={`${courseId}:${topicId}`}
             />
           ) : (
             <div className="mt-6 flex flex-col gap-6">
@@ -252,6 +266,7 @@ export function QuizPanel({
                     index={item.index}
                     picked={mcqAnswers[item.id]}
                     submitted={false}
+                    namePrefix={`${courseId}:${topicId}`}
                     onPick={(oi) => setMcqAnswers((s) => ({ ...s, [item.id]: oi }))}
                   />
                 ) : (
@@ -351,6 +366,7 @@ function FocusCard({
   onPick,
   onWrite,
   onJump,
+  namePrefix,
 }: {
   current: Item;
   step: number;
@@ -364,12 +380,13 @@ function FocusCard({
   onPick: (id: string, oi: number) => void;
   onWrite: (id: string, value: string) => void;
   onJump: (index: number) => void;
+  namePrefix: string;
 }) {
   return (
     <div className="mt-6 min-w-0">
       <div className="mb-4 flex items-center justify-between gap-3">
         <p className="kicker text-accent">
-          {current.kind === "mcq" ? `MCQ ${current.index + 1}` : `Writing ${current.index + 1}`}
+          {current.kind === "mcq" ? `MCQ ${current.index + 1}` : `FRQ ${current.index + 1}`}
           <span className="text-muted"> · {step + 1}/{total}</span>
         </p>
       </div>
@@ -403,6 +420,7 @@ function FocusCard({
           index={current.index}
           picked={mcqAnswers[current.id]}
           submitted={false}
+          namePrefix={namePrefix}
           onPick={(oi) => onPick(current.id, oi)}
         />
       ) : (
@@ -427,14 +445,17 @@ function McqCard({
   picked,
   submitted,
   onPick,
+  namePrefix,
 }: {
   q: Mcq;
   index: number;
   picked?: number;
   submitted: boolean;
   onPick?: (oi: number) => void;
+  namePrefix?: string;
 }) {
   const headingId = `${q.id}-prompt`;
+  const radioName = `${namePrefix ?? "q"}:${q.id}`;
   return (
     <div className="min-w-0 rounded-3xl bg-surface p-4 shadow-[var(--shadow-border)] sm:p-5">
       <p className="kicker text-muted">
@@ -463,7 +484,7 @@ function McqCard({
               <input
                 type="radio"
                 className="sr-only"
-                name={q.id}
+                name={radioName}
                 checked={isPicked}
                 disabled={submitted}
                 onChange={() => onPick?.(oi)}
@@ -488,9 +509,17 @@ function McqCard({
         })}
       </div>
       {submitted ? (
-        <p className="mt-4 min-w-0 rounded-xl bg-ok-soft px-3 py-3 text-sm leading-relaxed break-words text-wrap text-fg sm:px-4 sm:text-base">
-          <span className="font-medium text-ok">Answer {letters[q.correctIndex]}.</span> {q.explanation}
-        </p>
+        <div className="mt-4 flex min-w-0 flex-col gap-3">
+          <p className="min-w-0 rounded-xl bg-ok-soft px-3 py-3 text-sm leading-relaxed break-words text-wrap text-fg sm:px-4 sm:text-base">
+            <span className="font-medium text-ok">Answer {letters[q.correctIndex]}.</span> {q.explanation}
+          </p>
+          <div className="min-w-0 rounded-xl border border-ok/20 bg-surface-2 px-3 py-3 sm:px-4">
+            <p className="kicker text-ok">FRQ model</p>
+            <p className="mt-2 text-sm leading-relaxed break-words text-wrap text-fg sm:text-base">
+              {q.frqAnswer ?? `Write: ${q.options[q.correctIndex]}. ${q.explanation}`}
+            </p>
+          </div>
+        </div>
       ) : null}
     </div>
   );
@@ -518,7 +547,7 @@ function WritingCard({
   const words = value.trim() ? value.trim().split(/\s+/).length : 0;
   return (
     <div className="min-w-0 rounded-3xl bg-surface p-4 shadow-[var(--shadow-border)] sm:p-5">
-      <p className="kicker text-muted">Writing {index + 1}</p>
+      <p className="kicker text-muted">FRQ {index + 1}</p>
       <p className="mt-1.5 text-base font-medium leading-snug text-wrap text-fg sm:text-lg">{q.prompt}</p>
       {!submitted && !hideHints ? (
         <>
@@ -607,6 +636,7 @@ function Results({
   writingAnswers,
   onRetry,
   timedOut,
+  namePrefix,
 }: {
   score: number;
   mcqs: Mcq[];
@@ -615,17 +645,32 @@ function Results({
   writingAnswers: Record<string, string>;
   onRetry: () => void;
   timedOut?: boolean;
+  namePrefix: string;
 }) {
-  const tone = score === mcqs.length ? "Clean paper." : score >= mcqs.length * 0.7 ? "Strong work." : "Worth another pass.";
+  const writeN = writing.filter((q) => (writingAnswers[q.id] ?? "").trim()).length;
+  const hasMcq = mcqs.length > 0;
+  const tone = hasMcq
+    ? score === mcqs.length
+      ? "Clean paper."
+      : score >= mcqs.length * 0.7
+        ? "Strong work."
+        : "Worth another pass."
+    : "Compare your FRQs below.";
   return (
     <div className="mt-8 min-w-0">
       <div className="flex flex-col items-center gap-5 rounded-3xl bg-surface px-5 py-8 text-center shadow-[var(--shadow-border)] sm:flex-row sm:text-left">
-        <ScoreRing score={score} total={mcqs.length} />
+        <ScoreRing
+          score={hasMcq ? score : writeN}
+          total={hasMcq ? mcqs.length : writing.length}
+          label={hasMcq ? "MCQ" : "FRQ"}
+        />
         <div className="min-w-0">
           <p className="kicker text-accent">{timedOut ? "Time ended" : "Submitted"}</p>
           <h3 className="mt-1 font-serif text-3xl text-primary">{tone}</h3>
           <p className="mt-2 text-sm text-muted">
-            MCQ {score}/{mcqs.length}. Writing examples are open below so you can compare at once.
+            {hasMcq
+              ? `MCQ ${score}/${mcqs.length}. Each letter has an FRQ model. Writing examples are open below.`
+              : `${writeN}/${writing.length} writing answers. Model examples are open below so you can compare at once.`}
             {timedOut ? " The clock submitted what you had." : ""}
           </p>
           <Button variant="secondary" className="mt-4" onClick={onRetry}>
@@ -636,7 +681,7 @@ function Results({
 
       <div className="mt-6 flex flex-col gap-4">
         {mcqs.map((q, i) => (
-          <McqCard key={q.id} q={q} index={i} picked={mcqAnswers[q.id]} submitted />
+          <McqCard key={q.id} q={q} index={i} picked={mcqAnswers[q.id]} submitted namePrefix={namePrefix} />
         ))}
       </div>
 

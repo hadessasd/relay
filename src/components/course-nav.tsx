@@ -32,7 +32,7 @@ export function CourseNav({
     {
       to: "/course/$courseId/exam" as const,
       params: { courseId: course.id },
-      label: "Full mixed paper",
+      label: course.id === "foundations-ai" ? "Full FRQ paper" : "Full mixed paper",
       kicker: "EX",
       key: "exam",
     },

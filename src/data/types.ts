@@ -34,6 +34,8 @@ export type Mcq = {
   correctIndex: number;
   explanation: string;
   tag?: string;
+  /** Short exam-sentence a student could write after the letter. */
+  frqAnswer?: string;
 };
 
 export type WritingQ = {

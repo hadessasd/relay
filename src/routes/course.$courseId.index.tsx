@@ -75,7 +75,9 @@ function CourseHome() {
                   <span className="mt-0.5 block text-sm text-muted">{topic.summary}</span>
                   {result ? (
                     <span className="mt-1 block text-xs tabular-nums text-ok">
-                      Last score {result.mcqScore}/{result.mcqTotal} MCQ
+                      {result.mcqTotal > 0
+                        ? `Last score ${result.mcqScore}/${result.mcqTotal} MCQ`
+                        : `Writing submitted · ${result.writingCount} FRQ`}
                     </span>
                   ) : null}
                 </span>
@@ -107,11 +109,15 @@ function CourseHome() {
                   </span>
                   <span className="mt-2 font-medium">{mod.title}</span>
                   <span className="mt-1 text-sm text-primary-fg/75">
-                    {mod.mcqs.length} MCQ · {mod.writing.length} writing
+                    {mod.mcqs.length
+                      ? `${mod.mcqs.length} MCQ · ${mod.writing.length} writing`
+                      : `${mod.writing.length} FRQ · writing only`}
                   </span>
                   {result ? (
                     <span className="mt-3 text-xs tabular-nums text-primary-fg/80">
-                      Last {result.mcqScore}/{result.mcqTotal}
+                      {result.mcqTotal > 0
+                        ? `Last ${result.mcqScore}/${result.mcqTotal}`
+                        : `Last ${result.writingCount} FRQ`}
                     </span>
                   ) : (
                     <span className="mt-3 text-xs text-primary-fg/70">Answers after submit</span>
@@ -144,8 +150,14 @@ function CourseHome() {
               EX
             </span>
             <span>
-              <span className="block font-medium text-fg">Full mixed paper</span>
-              <span className="block text-sm text-muted">Untimed extra practice · answers after submit</span>
+              <span className="block font-medium text-fg">
+                {course.id === "foundations-ai" ? "Full FRQ paper" : "Full mixed paper"}
+              </span>
+              <span className="block text-sm text-muted">
+                {course.id === "foundations-ai"
+                  ? "Writing only · model answers after submit"
+                  : "Untimed extra practice · answers after submit"}
+              </span>
             </span>
           </Link>
         </li>

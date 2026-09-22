@@ -4,10 +4,12 @@ export function ScoreRing({
   score,
   total,
   className,
+  label = "MCQ",
 }: {
   score: number;
   total: number;
   className?: string;
+  label?: string;
 }) {
   const pct = total > 0 ? score / total : 0;
   const r = 38;
@@ -40,7 +42,7 @@ export function ScoreRing({
           {score}
           <span className="text-lg text-muted">/{total}</span>
         </p>
-        <p className="kicker mt-1 text-muted">MCQ</p>
+        <p className="kicker mt-1 text-muted">{label}</p>
       </div>
     </div>
   );

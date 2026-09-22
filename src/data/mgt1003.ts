@@ -1380,7 +1380,7 @@ export const mgt1003: Omit<Course, "examModules"> = {
   ],
   finalExam: {
     intro:
-      "Week 5 mixed paper — CLO 1 and CLO 2. New numbers, café stories, and the seven shape-words (pyramid, rooms, shops, grid, pancake, hub, projects). Submit once. Every MCQ letter and every writing model opens so you can compare.",
+      "Week 5 mixed paper — CLO 1 and CLO 2. Short stems. After every letter, a one-line FRQ model. New numbers, café stories, and the seven shape-words. Submit once.",
     mcqs: [
       {
         id: "mf-q1",
@@ -1668,3 +1668,13 @@ export const mgt1003: Omit<Course, "examModules"> = {
       "You do not need perfect English. You need clear ideas, one definition, one example, and one advantage/disadvantage. Write in short sentences. If you forget a company name, invent a simple local example (a salon, DEWA, a campus café). The examiner is looking for understanding.",
   },
 };
+
+for (const topic of mgt1003.topics) {
+  for (const q of topic.mcqs) {
+    q.frqAnswer ??= `Write: ${q.options[q.correctIndex]}. ${q.explanation}`;
+  }
+}
+for (const q of mgt1003.finalExam.mcqs) {
+  q.frqAnswer ??= `Write: ${q.options[q.correctIndex]}. ${q.explanation}`;
+}
+

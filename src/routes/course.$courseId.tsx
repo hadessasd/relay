@@ -1,4 +1,5 @@
 import { createFileRoute, Outlet, useRouterState } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { AppHeader } from "@/components/app-header";
 import { CampusGate } from "@/components/campus-login";
 import { CourseNav } from "@/components/course-nav";
@@ -35,6 +36,10 @@ function CourseLayout() {
     if (moduleMatch?.[1]) active = decodeURIComponent(moduleMatch[1]);
     else if (lessonMatch?.[1]) active = decodeURIComponent(lessonMatch[1]);
   }
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
 
   return (
     <CampusGate uniId="hct">

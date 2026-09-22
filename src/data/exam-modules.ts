@@ -1,4 +1,5 @@
 import type { ExamModule } from "./types";
+import { AI_MODULE_EXTRAS, moduleToFrqOnly } from "./ai-frq";
 
 export const mgtExamModules: ExamModule[] = [
   {
@@ -280,7 +281,7 @@ export const mgtExamModules: ExamModule[] = [
   },
 ];
 
-export const aiExamModules: ExamModule[] = [
+export const aiExamModulesRaw: ExamModule[] = [
   {
     id: "mod-1",
     number: "E1",
@@ -665,3 +666,15 @@ export const aiExamModules: ExamModule[] = [
     ],
   },
 ];
+
+export const aiExamModules: ExamModule[] = aiExamModulesRaw.map((m) =>
+  moduleToFrqOnly(m, AI_MODULE_EXTRAS[m.id]),
+);
+
+for (const mod of mgtExamModules) {
+  for (const q of mod.mcqs) {
+    q.frqAnswer ??= `Write: ${q.options[q.correctIndex]}. ${q.explanation}`;
+  }
+}
+
+

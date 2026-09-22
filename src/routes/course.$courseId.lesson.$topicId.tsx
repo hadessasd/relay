@@ -40,6 +40,7 @@ function LessonPage() {
       </div>
 
       <QuizPanel
+        key={`${course.id}:${topic.id}`}
         courseId={course.id}
         topicId={topic.id}
         mcqs={topic.mcqs}

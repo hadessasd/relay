@@ -26,6 +26,7 @@ function ExamPage() {
       <p className="mt-3 max-w-2xl text-muted">{course.finalExam.intro}</p>
 
       <QuizPanel
+        key={`${course.id}:exam`}
         courseId={course.id}
         topicId="exam"
         mcqs={course.finalExam.mcqs}
