@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { ArabicToggle } from "@/components/app-header";
 import { Button } from "@/components/ui/button";
 import { useStudent } from "@/lib/student-store";
 
@@ -13,6 +14,7 @@ export function SiteHeader() {
         <p className="truncate text-xs text-muted">Courses for UAE campuses · 2% platform fee</p>
       </Link>
       <nav className="flex items-center gap-2">
+        <ArabicToggle />
         <Link
           to="/zip"
           className="inline-flex min-h-11 items-center rounded-lg px-3 text-sm font-medium text-fg"

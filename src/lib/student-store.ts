@@ -19,17 +19,20 @@ type StudentState = {
   isStaff: boolean;
   staffToken: string | null;
   campus: CampusSession | null;
+  showArabic: boolean;
   hydrate: () => void;
   login: (name: string, campus?: CampusSession) => void;
   logout: () => void;
   saveResult: (result: QuizResult) => void;
   enterStaff: (token: string) => void;
   mergeResults: (name: string, results: QuizResult[]) => void;
+  setShowArabic: (on: boolean) => void;
 };
 
 const KEY = "kstudy-student";
 const STAFF_KEY = "kstudy-staff";
 const CAMPUS_KEY = "kstudy-campus";
+const ARABIC_KEY = "kstudy-arabic";
 
 function normalizeName(name: string) {
   return name.trim().replace(/\s+/g, " ").slice(0, 48);
@@ -95,6 +98,22 @@ function writeCampus(campus: CampusSession | null) {
   else window.localStorage.removeItem(CAMPUS_KEY);
 }
 
+function readArabic() {
+  if (typeof window === "undefined") return true;
+  try {
+    const raw = window.localStorage.getItem(ARABIC_KEY);
+    if (raw === "0" || raw === "off") return false;
+    return true;
+  } catch {
+    return true;
+  }
+}
+
+function writeArabic(on: boolean) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(ARABIC_KEY, on ? "1" : "0");
+}
+
 function newerWins(local: QuizResult[], remote: QuizResult[]) {
   const map = new Map<string, QuizResult>();
   for (const item of local) map.set(`${item.courseId}:${item.topicId}`, item);
@@ -135,16 +154,22 @@ export const useStudent = create<StudentState>()((set, get) => ({
   isStaff: false,
   staffToken: null,
   campus: null,
+  showArabic: true,
   hydrate: () => {
     const loaded = readStorage();
     const staffToken = readStaffToken();
     const campus = readCampus();
+    const showArabic = readArabic();
+    if (typeof document !== "undefined") {
+      document.documentElement.dataset.arabic = showArabic ? "on" : "off";
+    }
     set({
       ...loaded,
       currentName: staffToken ? null : loaded.currentName,
       staffToken,
       isStaff: Boolean(staffToken),
       campus: staffToken ? null : campus,
+      showArabic,
       hydrated: true,
     });
     const name = staffToken ? null : loaded.currentName;
@@ -222,5 +247,12 @@ export const useStudent = create<StudentState>()((set, get) => ({
       writeStorage(next);
       return next;
     });
+  },
+  setShowArabic: (on) => {
+    writeArabic(on);
+    if (typeof document !== "undefined") {
+      document.documentElement.dataset.arabic = on ? "on" : "off";
+    }
+    set({ showArabic: on });
   },
 }));

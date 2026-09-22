@@ -40,7 +40,8 @@ function skip(relPath) {
   if (parts.some((p) => SKIP_DIRS.has(p))) return true;
   const base = parts[parts.length - 1] ?? "";
   if (SKIP_FILES.has(base)) return true;
-  if (base.endsWith(".zip") || base.endsWith(".log")) return true;
+  if (base.endsWith(".log")) return true;
+  if (base === "kstudy-academy.zip") return true;
   if (base.startsWith(".env")) return true;
   if (base === ".DS_Store") return true;
   return false;

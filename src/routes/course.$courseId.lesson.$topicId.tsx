@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Download } from "lucide-react";
 import { ContentBlocks } from "@/components/content-blocks";
 import { QuizPanel } from "@/components/quiz-panel";
 import { getTopic } from "@/data/courses";
@@ -34,6 +34,17 @@ function LessonPage() {
         {topic.title}
       </h1>
       <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted sm:text-base">{topic.summary}</p>
+
+      {topic.slides ? (
+        <a
+          href={topic.slides.href}
+          download={topic.slides.filename}
+          className="mt-5 inline-flex min-h-11 items-center gap-2 rounded-xl bg-surface px-4 text-sm font-medium text-fg shadow-[var(--shadow-border)]"
+        >
+          <Download className="size-4 text-accent" />
+          {topic.slides.label}
+        </a>
+      ) : null}
 
       <div className="mt-8">
         <ContentBlocks blocks={topic.blocks} />

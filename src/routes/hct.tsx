@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { AppHeader } from "@/components/app-header";
-import { Art, ART } from "@/components/art";
+import { Art, ART, courseArt } from "@/components/art";
 import { CampusLogin } from "@/components/campus-login";
 import { courses } from "@/data/courses";
 import { getUniversity } from "@/data/universities";
@@ -40,17 +40,17 @@ function HctCampus() {
                 Hello, {first}.
               </h1>
               <p className="mt-2 max-w-lg text-sm text-primary-fg/80">
-                Read the explanation, then practise. Three timed exam modules wait at the end of each subject.
+                Read the explanation, then practise. Four full example tests wait at the end of Applied Mathematics — Management and AI keep their timed modules.
               </p>
               <p className="mt-4 text-xs text-primary-fg/70 tabular-nums">{overall}% of the studio complete</p>
             </div>
           </div>
         </div>
 
-        <div className="mt-8 grid gap-5 lg:grid-cols-2">
+        <div className="mt-8 grid gap-5 lg:grid-cols-3">
           {courses.map((course) => {
             const progress = summarizeCourse(course.id, results);
-            const art = course.id === "mgt-1003" ? ART.mgt : ART.ai;
+            const art = courseArt(course.id);
             return (
               <Link
                 key={course.id}

@@ -27,6 +27,8 @@ function ExamModulePage() {
     <article>
       <p className="kicker text-accent">
         {course.examLabel} · {mod.minutes} minutes
+        {typeof mod.calculator === "boolean" ? (mod.calculator ? " · calculator allowed" : " · no calculator") : ""}
+        {mod.marks ? ` · ${mod.marks} marks` : ""}
       </p>
       <h1 className="mt-2 font-serif text-4xl tracking-tight text-primary">{mod.title}</h1>
       <p className="mt-3 flex items-start gap-2 max-w-2xl text-muted">

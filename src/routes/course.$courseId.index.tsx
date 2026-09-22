@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Check, Clock } from "lucide-react";
-import { Art, ART } from "@/components/art";
+import { ArrowRight, Check, Clock, Download } from "lucide-react";
+import { Art, courseArt } from "@/components/art";
 import { getCourse } from "@/data/courses";
 import { useStudent } from "@/lib/student-store";
 
@@ -19,7 +19,7 @@ function CourseHome() {
   if (!course) return null;
 
   const firstOpen = course.topics.find((t) => !done.has(t.id)) ?? course.topics[0];
-  const art = course.id === "mgt-1003" ? ART.mgt : ART.ai;
+  const art = courseArt(course.id);
   const firstModule = course.examModules[0];
 
   return (
@@ -53,6 +53,22 @@ function CourseHome() {
           ) : null}
         </div>
       </div>
+
+      {course.pack ? (
+        <a
+          href={course.pack.href}
+          download={course.pack.filename}
+          className="mt-6 flex items-start gap-3 rounded-2xl bg-surface px-4 py-3.5 shadow-[var(--shadow-border)]"
+        >
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-accent/12 text-accent">
+            <Download className="size-4" />
+          </span>
+          <span className="min-w-0">
+            <span className="block font-medium text-fg">{course.pack.title}</span>
+            <span className="mt-0.5 block text-sm text-muted">{course.pack.note}</span>
+          </span>
+        </a>
+      ) : null}
 
       <ol className="mt-8 flex flex-col gap-2">
         {course.topics.map((topic) => {
@@ -90,7 +106,7 @@ function CourseHome() {
       <div className="mt-10">
         <p className="kicker text-accent">Timed exam modules</p>
         <h2 className="mt-1 font-serif text-2xl text-primary">Check at the end. The clock is running.</h2>
-        <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+        <ul className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {course.examModules.map((mod) => {
             const result = results.find((r) => r.topicId === mod.id);
             return (
@@ -110,7 +126,7 @@ function CourseHome() {
                   <span className="mt-2 font-medium">{mod.title}</span>
                   <span className="mt-1 text-sm text-primary-fg/75">
                     {mod.mcqs.length
-                      ? `${mod.mcqs.length} MCQ · ${mod.writing.length} writing`
+                      ? `${mod.mcqs.length} auto-grade · ${mod.writing.length} writing${mod.calculator ? " · calculator" : ""}`
                       : `${mod.writing.length} FRQ · writing only`}
                   </span>
                   {result ? (
@@ -133,7 +149,7 @@ function CourseHome() {
             params={{ courseId: course.id, moduleId: firstModule.id }}
             className="mt-4 inline-flex min-h-11 items-center gap-2 text-sm font-medium text-primary"
           >
-            Start module 1
+            Start {firstModule.number}
             <ArrowRight className="size-4" />
           </Link>
         ) : null}
@@ -151,7 +167,11 @@ function CourseHome() {
             </span>
             <span>
               <span className="block font-medium text-fg">
-                {course.id === "foundations-ai" ? "Full FRQ paper" : "Full mixed paper"}
+                {course.id === "foundations-ai"
+                  ? "Full FRQ paper"
+                  : course.id === "bus-1023"
+                    ? "Mixed CLO 1 & CLO 2 paper"
+                    : "Full mixed paper"}
               </span>
               <span className="block text-sm text-muted">
                 {course.id === "foundations-ai"

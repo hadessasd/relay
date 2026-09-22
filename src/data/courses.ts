@@ -1,3 +1,4 @@
+import { bus1023 } from "./bus-1023";
 import { aiExamModules, mgtExamModules } from "./exam-modules";
 import { foundationsAi } from "./foundations-ai";
 import { mgt1003 } from "./mgt1003";
@@ -6,6 +7,7 @@ import type { Course } from "./types";
 export const courses: Course[] = [
   { ...mgt1003, examModules: mgtExamModules },
   { ...foundationsAi, examModules: aiExamModules },
+  bus1023,
 ];
 
 export function getCourse(id: string): Course | undefined {

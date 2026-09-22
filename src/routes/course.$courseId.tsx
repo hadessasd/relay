@@ -18,6 +18,10 @@ function CourseLayout() {
   const results = name ? (students[name]?.results ?? []).filter((r) => r.courseId === courseId) : [];
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, [pathname]);
+
   if (!course) {
     return (
       <div className="paper-wash min-h-dvh">
@@ -36,10 +40,6 @@ function CourseLayout() {
     if (moduleMatch?.[1]) active = decodeURIComponent(moduleMatch[1]);
     else if (lessonMatch?.[1]) active = decodeURIComponent(lessonMatch[1]);
   }
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "instant" });
-  }, [pathname]);
 
   return (
     <CampusGate uniId="hct">
